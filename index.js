@@ -25,10 +25,6 @@ function findduplicates(array) {
     return Array.from(duplicates)
 }
 
-function flatten(array) {
-    return array.reduce((acc, val) => acc.concat(Array.isArray(val) ? flatten(val) : val), [])
-}
-
 function groupBy(array, callback) {
     return array.reduce((acc, value) => {
         const key = callback(value)
@@ -53,26 +49,30 @@ function zip(...arrays) {
 
 function chunk(array, size) {
     const chunks = [];
-    for (let i = 0; i < array.length; i++){
+    for (let i = 0; i < array.length; i++) {
         chunks.push(array.slice(i, i + size));
     }
     return chunks;
 }
 
-function max(array){
+function max(array) {
     return Math.max(...array)
 }
 
-function removeFalsy(array){
+function min(array) {
+    return Math.min(...array)
+}
+
+function removeFalsy(array) {
     return array.filter(Boolean)
 }
 
-function shift(array, positions){
+function shift(array, positions) {
     constindex = positions % array.length;
     return [...array.slice(index), ...array.slice(0, index)]
 }
 
-function countBy(array, callback){
+function countBy(array, callback) {
     return array.reduce((acc, value) => {
         const key = callback(value);
         acc[key] = (acc[key] || 0) + 1;
@@ -80,7 +80,111 @@ function countBy(array, callback){
     }, {})
 }
 
-function difference(array1, array2){
+function difference(array1, array2) {
     const set = new Set(array2);
     return array1.filter((value) => !set.has(value))
+}
+
+function intersection(...arrays) {
+    const set = new Set(arrays[0]);
+    return arrays.slice(1).reduce((acc, array) => {
+        return acc.filter((value) => set.has(value));
+    }, set);
+}
+
+function pluck(array, property) {
+    return array.map((obj) => obj[property]);
+}
+
+function sample(array) {
+    return array[Math.floor(random() * array.length)];
+}
+
+function sortBy(array, callback) {
+    return array.slice().sort((a, b) => callback(a) - callback(b));
+}
+
+function sum(array) {
+    return array.reduce((acc, value) => acc + value, 0);
+}
+
+function setparent(array, key) {
+    array.reduce((object, item) => {
+        object[item[key]] = item;
+        return object;
+    }, {})
+}
+
+function last(array) {
+    return array[array.length - 1];
+}
+
+function last(array) {
+    return array[array.length - 1];
+}
+
+function makeNestedArray(data) {
+    const parentMap = {};
+    const result = [];
+
+    data.forEach(item => {
+        if (!item.parent) {
+            result.push(item);
+        } else {
+            const parentId = item.parent;
+            if (!parentMap[parentId]) {
+                parentMap[parentId] = [];
+            }
+            parentMap[parentId].push(item);
+        }
+    });
+
+    const addChildren = parent => {
+        if (parentMap[parent.id]) {
+            parent.children = parentMap[parent.id];
+            parent.children.forEach(child => addChildren(child));
+        }
+    };
+
+    result.forEach(parent => addChildren(parent));
+    return result;
+}
+
+function flatten(nestedData){
+    const flatArray = [];
+
+    const extractItems = item => {
+      flatArray.push(item);
+      if (item.children) {
+        item.children.forEach(child => extractItems(child));
+      }
+    };
+  
+    nestedData.forEach(parent => extractItems(parent));
+  
+    return flatArray;
+}
+
+module.exports = {
+    shuffle,
+    findduplicates,
+    groupBy,
+    unique,
+    zip,
+    chunk,
+    max,
+    min,
+    removeFalsy,
+    shift,
+    countBy,
+    difference,
+    intersection,
+    pluck,
+    sample,
+    sortBy,
+    sum,
+    setparent,
+    last,
+    makeNestedArray,
+    flatten
 }
