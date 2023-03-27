@@ -43,7 +43,7 @@ You can find the documentation for all the functions in the [API reference](#API
 #### sortBy(array, callback) 
 - Sorts the input array by the result of calling the given callback function on each element.
 
-## Filtering
+### Filtering
 #### findduplicates(array) 
 - Returns an array of duplicate elements in the input array.
 
@@ -62,6 +62,12 @@ You can find the documentation for all the functions in the [API reference](#API
 #### pluck(array, property) 
 - Returns an array of values for the given property on each element in the input array.
 
+#### unique(...array)
+- Returns an array of unique elements from the input arrays.
+
+#### sample(array, n)
+- Returns n random elements from the input array.
+
 ### Manipulating
 #### shift(array, positions) 
 - Returns a new array with the elements of the input array shifted to the left by positions positions.
@@ -72,11 +78,14 @@ You can find the documentation for all the functions in the [API reference](#API
 #### setparent(array, key) 
 - Returns an object where each key is the value of the key property on each element in the input array, and the value is the corresponding element.
 
+#### zip(...arrays)
+- Returns a new array where each element is an array containing the corresponding elements from the input arrays.
+
 ### Accessing
-#### max(array) 
+#### max(...array) 
 - Returns the maximum value in the input array.
 
-#### min(array) 
+#### min(...array) 
 - Returns the minimum value in the input array.
 
 #### last(array) 

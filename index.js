@@ -34,10 +34,6 @@ function groupBy(array, callback) {
     }, {})
 }
 
-function unique(array) {
-    return Array.from(new Set(array))
-}
-
 function zip(...arrays) {
     const maxLength = Math.min(...arrays.map((array) => array.length));
     const zipped = [];
@@ -55,21 +51,24 @@ function chunk(array, size) {
     return chunks;
 }
 
-function max(array) {
-    return Math.max(...array)
+//return highes value of all arrays
+function max(...array) {
+    const flattenedArray = [].concat(...array);
+    return Math.max.apply(null, flattenedArray);
 }
 
-function min(array) {
-    return Math.min(...array)
+function min(...array) {
+    const flattenedArray = [].concat(...array);
+    return Math.min.apply(null, flattenedArray);
 }
 
 function removeFalsy(array) {
-    return array.filter(Boolean)
+    array.filter(Boolean);
 }
 
 function shift(array, positions) {
     constindex = positions % array.length;
-    return [...array.slice(index), ...array.slice(0, index)]
+    return [...array.slice(constindex), ...array.slice(0, constindex)]
 }
 
 function countBy(array, callback) {
@@ -80,24 +79,12 @@ function countBy(array, callback) {
     }, {})
 }
 
-function difference(array1, array2) {
-    const set = new Set(array2);
-    return array1.filter((value) => !set.has(value))
-}
-
-function intersection(...arrays) {
-    const set = new Set(arrays[0]);
-    return arrays.slice(1).reduce((acc, array) => {
-        return acc.filter((value) => set.has(value));
-    }, set);
-}
-
 function pluck(array, property) {
     return array.map((obj) => obj[property]);
 }
 
-function sample(array) {
-    return array[Math.floor(random() * array.length)];
+function sample(array, n) {
+    return shuffle(array).slice(0, n);
 }
 
 function sortBy(array, callback) {
@@ -113,10 +100,6 @@ function setparent(array, key) {
         object[item[key]] = item;
         return object;
     }, {})
-}
-
-function last(array) {
-    return array[array.length - 1];
 }
 
 function last(array) {
@@ -163,6 +146,48 @@ function flatten(nestedData){
     nestedData.forEach(parent => extractItems(parent));
   
     return flatArray;
+}
+
+function difference(...arrays){
+    const firstArray = arrays[0];
+    const otherArrays = arrays.slice(1);
+    const set = new Set(firstArray);
+    const deleted = new Set();
+    otherArrays.forEach((array) => {
+        array.forEach((value) => {
+            if (set.has(value)) {
+                deleted.add(value);
+            }
+            else {
+                set.add(value);
+            }
+        });
+    });
+    deleted.forEach((value) => {
+        set.delete(value);
+    });
+    return Array.from(set);
+}
+
+function unique(...arrays) {
+    const firstArray = arrays[0];
+    const otherArrays = arrays.slice(1);
+    const set = new Set(firstArray);
+    otherArrays.forEach((array) => {
+      array.forEach((value) => {
+        if (!set.has(value)) {
+          set.add(value);
+        }
+      });
+    });
+    return Array.from(set);
+}
+
+function intersection(...arrays) {
+    const set = new Set(arrays[0]);
+    return arrays.slice(1).reduce((acc, array) => {
+        return array.filter((value) => set.has(value));
+    }, set);
 }
 
 module.exports = {
